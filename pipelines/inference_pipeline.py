@@ -116,7 +116,7 @@ class InferencePipeline:
         # SHAP explanations (class 1 = churn)
         # Pass df_feat which matches training features perfectly now
         shap_values = self.explainer.shap_values(df_feat)
-        
+
         # Format depends on SHAP version & model type. Extract class 1, first row.
         if isinstance(shap_values, list):
             sv = shap_values[1][0]

@@ -10,19 +10,13 @@ Four-tab interface:
 from __future__ import annotations
 
 import logging
-import threading
 from typing import Any
 
 import gradio as gr
-import numpy as np
-import pandas as pd
 
 from src.config import settings
 from src.data.loader import load_raw_data
-from src.data.preprocessor import Preprocessor
-from src.features.engineer import FeatureEngineer
 from src.features.schema import CATEGORICAL_VALUES
-from src.models.train import load_production_model
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
@@ -262,7 +256,9 @@ def predict_single(
                 border-radius:16px; color:white; text-align:center; margin-bottom:16px;">
         <div style="font-size:3em; margin-bottom:8px">{icon}</div>
         <div style="font-size:2.2em; font-weight:800">{res.churn_probability:.1%}</div>
-        <div style="font-size:1.1em; opacity:.9; margin-top:4px">{res.risk_level} Risk · {"Will Churn" if res.churn_prediction else "Likely Stays"}</div>
+        <div style="font-size:1.1em; opacity:.9; margin-top:4px">
+            {res.risk_level} Risk · {"Will Churn" if res.churn_prediction else "Likely Stays"}
+        </div>
         <div style="font-size:.8em; opacity:.7; margin-top:8px">threshold: {res.threshold:.0%}</div>
     </div>"""
 
@@ -520,7 +516,7 @@ with gr.Blocks(
             )
 
             gr.Markdown("---")
-            gr.Markdown(f"### MLflow Experiment Tracker")
+            gr.Markdown("### MLflow Experiment Tracker")
             gr.HTML(
                 "<p style='opacity:0.8; font-size:0.95em;'>"
                 "MLflow secures its web interface by blocking iframe embeds "

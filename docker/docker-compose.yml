@@ -4,7 +4,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./mlruns:/mlflow/mlruns
+      - ../mlruns:/mlflow/mlruns
     command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri /mlflow/mlruns
 
   gradio-app:
@@ -14,7 +14,10 @@ services:
     ports:
       - "7860:7860"
     volumes:
-      - ./mlruns:/app/mlruns
+      - ../mlruns:/app/mlruns
+      - ../data:/app/data
+      - ../models:/app/models
+      - ../feature_store:/app/feature_store
     depends_on:
       - mlflow
     environment:
