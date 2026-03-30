@@ -1,0 +1,53 @@
+data:
+  raw_path: "data/raw/Telco-Customer-Churn.csv"
+  target_column: "Churn"
+  id_column: "customerID"
+  drop_columns:
+    - "customerID"
+    - "CustomerSatisfactionScore"
+  test_size: 0.2
+  random_state: 42
+
+features:
+  numeric:
+    - "tenure"
+    - "MonthlyCharges"
+    - "TotalCharges"
+  binary:
+    - "SeniorCitizen"
+    - "Partner"
+    - "Dependents"
+    - "PhoneService"
+    - "PaperlessBilling"
+  categorical:
+    - "gender"
+    - "MultipleLines"
+    - "InternetService"
+    - "OnlineSecurity"
+    - "OnlineBackup"
+    - "DeviceProtection"
+    - "TechSupport"
+    - "StreamingTV"
+    - "StreamingMovies"
+    - "Contract"
+    - "PaymentMethod"
+
+model:
+  type: "RandomForest"
+  params:
+    n_estimators: 100
+    random_state: 42
+    class_weight: "balanced"
+  threshold: 0.30
+
+mlflow:
+  experiment_name: "churn-prediction"
+  tracking_uri: "mlruns"
+  model_name: "churn-classifier"
+
+serving:
+  host: "0.0.0.0"
+  port: 7860
+
+feature_store:
+  path: "feature_store"

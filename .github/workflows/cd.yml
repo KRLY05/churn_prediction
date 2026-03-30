@@ -1,0 +1,44 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  train-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Copy data
+        run: |
+          mkdir -p data/raw
+          cp Telco-Customer-Churn.csv data/raw/
+
+      - name: Run training pipeline
+        run: python -m pipelines.train_pipeline
+
+      - name: Deploy to Hugging Face Spaces
+        if: success()
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          pip install huggingface_hub
+          python -c "
+          from huggingface_hub import HfApi
+          api = HfApi(token=\"$HF_TOKEN\")
+          api.upload_folder(
+              folder_path=\"./\",
+              repo_id=\"your-username/churn-predictor\",
+              repo_type=\"space\",
+              ignore_patterns=[\"data/*\", \"mlruns/*\", \".git/*\", \"*.csv\"],
+          )
+          "

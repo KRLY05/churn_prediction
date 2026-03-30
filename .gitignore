@@ -1,1 +1,12 @@
 *.csv
+mlruns/
+feature_store/
+models/
+data/raw/
+__pycache__/
+*.pyc
+.ruff_cache/
+dist/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
